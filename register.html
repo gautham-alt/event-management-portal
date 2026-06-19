@@ -1,181 +1,157 @@
-'use strict';
+<!DOCTYPE html>
 
-document.addEventListener('DOMContentLoaded', () => {
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Event Management Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <nav>
+        <div class="logo">Event Management Portal</div>
 
 ```
-const form = document.getElementById('registerForm');
-const successMessage = document.getElementById('successMessage');
-
-const fields = {
-    fullName: {
-        input: document.getElementById('fullName'),
-        error: document.getElementById('fullNameError')
-    },
-    email: {
-        input: document.getElementById('email'),
-        error: document.getElementById('emailError')
-    },
-    phone: {
-        input: document.getElementById('phone'),
-        error: document.getElementById('phoneError')
-    },
-    college: {
-        input: document.getElementById('college'),
-        error: document.getElementById('collegeError')
-    },
-    eventSelect: {
-        input: document.getElementById('eventSelect'),
-        error: document.getElementById('eventSelectError')
-    }
-};
-
-const feeInput = document.getElementById('eventFee');
-const paymentStatus = document.getElementById('paymentStatus');
-
-const eventFees = {
-    'hackathon-2026': 200,
-    'tech-talk': 100,
-    'coding-challenge': 150
-};
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_REGEX = /^[0-9+\-\s]{7,15}$/;
-const STORAGE_KEY = 'eventRegistrations';
-
-function setError(fieldKey, message) {
-    const { input, error } = fields[fieldKey];
-    error.textContent = message;
-    input.classList.add('input-invalid');
-}
-
-function clearError(fieldKey) {
-    const { input, error } = fields[fieldKey];
-    error.textContent = '';
-    input.classList.remove('input-invalid');
-}
-
-function clearAllErrors() {
-    Object.keys(fields).forEach(clearError);
-}
-
-function validateForm() {
-
-    let isValid = true;
-
-    const fullName = fields.fullName.input.value.trim();
-    const email = fields.email.input.value.trim();
-    const phone = fields.phone.input.value.trim();
-    const college = fields.college.input.value.trim();
-    const eventValue = fields.eventSelect.input.value;
-
-    if (!fullName || fullName.length < 3) {
-        setError('fullName', 'Enter a valid full name.');
-        isValid = false;
-    }
-
-    if (!EMAIL_REGEX.test(email)) {
-        setError('email', 'Enter a valid email address.');
-        isValid = false;
-    }
-
-    if (!PHONE_REGEX.test(phone)) {
-        setError('phone', 'Enter a valid phone number.');
-        isValid = false;
-    }
-
-    if (!college) {
-        setError('college', 'College name is required.');
-        isValid = false;
-    }
-
-    if (!eventValue) {
-        setError('eventSelect', 'Please select an event.');
-        isValid = false;
-    }
-
-    return isValid;
-}
-
-function getStoredRegistrations() {
-    return JSON.parse(
-        localStorage.getItem(STORAGE_KEY) || '[]'
-    );
-}
-
-function saveRegistration(registration) {
-    const registrations = getStoredRegistrations();
-    registrations.push(registration);
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(registrations)
-    );
-}
-
-function showSuccessMessage() {
-
-    successMessage.hidden = false;
-
-    successMessage.innerHTML =
-        '✅ Registration Successful! Redirecting to Admin Login...';
-
-    successMessage.style.display = 'block';
-
-    successMessage.scrollIntoView({
-        behavior: 'smooth'
-    });
-}
-
-fields.eventSelect.input.addEventListener('change', () => {
-
-    const selectedEvent = fields.eventSelect.input.value;
-
-    if (eventFees[selectedEvent]) {
-        feeInput.value = '₹' + eventFees[selectedEvent];
-    } else {
-        feeInput.value = '';
-    }
-});
-
-form.addEventListener('submit', (e) => {
-
-    e.preventDefault();
-
-    clearAllErrors();
-
-    if (!validateForm()) {
-        return;
-    }
-
-    const registration = {
-        fullName: fields.fullName.input.value.trim(),
-        email: fields.email.input.value.trim(),
-        phone: fields.phone.input.value.trim(),
-        college: fields.college.input.value.trim(),
-        event: fields.eventSelect.input.value,
-        fee: feeInput.value,
-        paymentStatus: paymentStatus.value,
-        registeredAt: new Date().toISOString()
-    };
-
-    saveRegistration(registration);
-
-    showSuccessMessage();
-
-    form.reset();
-    feeInput.value = '';
-
-    setTimeout(() => {
-        window.location.href = 'admin-login.html';
-    }, 2000);
-});
-
-Object.keys(fields).forEach((key) => {
-    fields[key].input.addEventListener('input', () => {
-        clearError(key);
-    });
-});
+    <ul class="nav-links">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#events">Events</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="admin-login.html">Admin Login</a></li>
+    </ul>
+</nav>
 ```
 
-});
+</header>
+
+<main>
+    <section class="registration-section">
+
+```
+    <form class="register-form" id="registerForm" novalidate>
+
+        <h2>Event Registration</h2>
+
+        <p class="form-note">
+            Fill in your details below to register for an event.
+        </p>
+
+        <div id="successMessage"
+             class="success-message"
+             hidden>
+        </div>
+
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+
+            <input
+                type="text"
+                id="fullName"
+                placeholder="Enter your full name">
+
+            <span id="fullNameError"
+                  class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email">
+
+            <span id="emailError"
+                  class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+
+            <input
+                type="tel"
+                id="phone"
+                placeholder="Enter your phone number">
+
+            <span id="phoneError"
+                  class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="college">College Name</label>
+
+            <input
+                type="text"
+                id="college"
+                placeholder="Enter your college">
+
+            <span id="collegeError"
+                  class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="eventSelect">Select Event</label>
+
+            <select id="eventSelect">
+                <option value="">Choose an Event</option>
+                <option value="hackathon-2026">
+                    Hackathon 2026
+                </option>
+                <option value="tech-talk">
+                    Tech Talk
+                </option>
+                <option value="coding-challenge">
+                    Coding Challenge
+                </option>
+            </select>
+
+            <span id="eventSelectError"
+                  class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="eventFee">Event Fee</label>
+
+            <input
+                type="text"
+                id="eventFee"
+                readonly
+                placeholder="Fee will appear here">
+        </div>
+
+        <div class="form-group">
+            <label for="paymentStatus">
+                Payment Status
+            </label>
+
+            <select id="paymentStatus">
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+            </select>
+        </div>
+
+        <button type="submit"
+                class="btn btn-block">
+            Submit Registration
+        </button>
+
+    </form>
+
+</section>
+```
+
+</main>
+
+<footer>
+    <p>
+        &copy; 2026 Event Management Portal.
+        All Rights Reserved.
+    </p>
+</footer>
+
+<script src="js/register.js"></script>
+
+</body>
+</html>
 
