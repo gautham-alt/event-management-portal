@@ -20,11 +20,13 @@ pipeline {
                 echo 'Running Tests'
             }
         }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying Application'
-            }
-        }
+	stage('Deploy') {
+    steps {
+        sh '''
+        sudo rm -rf /var/www/html/*
+        sudo cp -r * /var/www/html/
+        '''
+    }
+}
     }
 }
