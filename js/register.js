@@ -1,212 +1,181 @@
 'use strict';
 
-/* ===================================================================
-   Event Registration Form — register.js
-   Handles validation, localStorage persistence, and UI feedback.
-=================================================================== */
-
 document.addEventListener('DOMContentLoaded', () => {
 
-  const form = document.getElementById('registerForm');
-  const successMessage = document.getElementById('successMessage');
 
-  const fields = {
+const form = document.getElementById('registerForm');
+const successMessage = document.getElementById('successMessage');
+
+const fields = {
     fullName: {
-      input: document.getElementById('fullName'),
-      error: document.getElementById('fullNameError'),
+        input: document.getElementById('fullName'),
+        error: document.getElementById('fullNameError')
     },
     email: {
-      input: document.getElementById('email'),
-      error: document.getElementById('emailError'),
+        input: document.getElementById('email'),
+        error: document.getElementById('emailError')
     },
     phone: {
-      input: document.getElementById('phone'),
-      error: document.getElementById('phoneError'),
+        input: document.getElementById('phone'),
+        error: document.getElementById('phoneError')
     },
     college: {
-      input: document.getElementById('college'),
-      error: document.getElementById('collegeError'),
+        input: document.getElementById('college'),
+        error: document.getElementById('collegeError')
     },
     eventSelect: {
-      input: document.getElementById('eventSelect'),
-      error: document.getElementById('eventSelectError'),
-    },
-  };
+        input: document.getElementById('eventSelect'),
+        error: document.getElementById('eventSelectError')
+    }
+};
 
-  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const PHONE_REGEX = /^[0-9+\-\s]{7,15}$/;
-  const STORAGE_KEY = 'eventRegistrations';
+const feeInput = document.getElementById('eventFee');
+const paymentStatus = document.getElementById('paymentStatus');
 
-  /**
-   * Displays an inline error message for a field and marks it invalid.
-   */
-  const setError = (fieldKey, message) => {
+const eventFees = {
+    'hackathon-2026': 200,
+    'tech-talk': 100,
+    'coding-challenge': 150
+};
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_REGEX = /^[0-9+\-\s]{7,15}$/;
+const STORAGE_KEY = 'eventRegistrations';
+
+function setError(fieldKey, message) {
     const { input, error } = fields[fieldKey];
     error.textContent = message;
-    input.setAttribute('aria-invalid', 'true');
     input.classList.add('input-invalid');
-  };
+}
 
-  /**
-   * Clears any inline error message for a field.
-   */
-  const clearError = (fieldKey) => {
+function clearError(fieldKey) {
     const { input, error } = fields[fieldKey];
     error.textContent = '';
-    input.removeAttribute('aria-invalid');
     input.classList.remove('input-invalid');
-  };
+}
 
-  const clearAllErrors = () => {
+function clearAllErrors() {
     Object.keys(fields).forEach(clearError);
-  };
+}
 
-  /**
-   * Runs all field validations.
-   * Returns true if the form is valid, false otherwise.
-   */
-  const validateForm = () => {
+function validateForm() {
+
     let isValid = true;
 
     const fullName = fields.fullName.input.value.trim();
     const email = fields.email.input.value.trim();
     const phone = fields.phone.input.value.trim();
     const college = fields.college.input.value.trim();
-    const eventSelect = fields.eventSelect.input.value.trim();
+    const eventValue = fields.eventSelect.input.value;
 
-    if (!fullName) {
-      setError('fullName', 'Full name is required.');
-      isValid = false;
-    } else if (fullName.length < 3) {
-      setError('fullName', 'Full name must be at least 3 characters.');
-      isValid = false;
+    if (!fullName || fullName.length < 3) {
+        setError('fullName', 'Enter a valid full name.');
+        isValid = false;
     }
 
-    if (!email) {
-      setError('email', 'Email address is required.');
-      isValid = false;
-    } else if (!EMAIL_REGEX.test(email)) {
-      setError('email', 'Please enter a valid email address.');
-      isValid = false;
+    if (!EMAIL_REGEX.test(email)) {
+        setError('email', 'Enter a valid email address.');
+        isValid = false;
     }
 
-    if (!phone) {
-      setError('phone', 'Phone number is required.');
-      isValid = false;
-    } else if (!PHONE_REGEX.test(phone)) {
-      setError('phone', 'Please enter a valid phone number (7-15 digits).');
-      isValid = false;
+    if (!PHONE_REGEX.test(phone)) {
+        setError('phone', 'Enter a valid phone number.');
+        isValid = false;
     }
 
     if (!college) {
-      setError('college', 'College name is required.');
-      isValid = false;
+        setError('college', 'College name is required.');
+        isValid = false;
     }
 
-    if (!eventSelect) {
-      setError('eventSelect', 'Please select an event.');
-      isValid = false;
+    if (!eventValue) {
+        setError('eventSelect', 'Please select an event.');
+        isValid = false;
     }
 
     return isValid;
-  };
+}
 
-  /**
-   * Reads existing registrations from localStorage.
-   */
-  const getStoredRegistrations = () => {
-    try {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
-    } catch (err) {
-      console.error('Failed to read registrations from localStorage:', err);
-      return [];
-    }
-  };
+function getStoredRegistrations() {
+    return JSON.parse(
+        localStorage.getItem(STORAGE_KEY) || '[]'
+    );
+}
 
-  /**
-   * Saves a new registration record to localStorage.
-   */
-  const saveRegistration = (registration) => {
-    try {
-      const registrations = getStoredRegistrations();
-      registrations.push(registration);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(registrations));
-      return true;
-    } catch (err) {
-      console.error('Failed to save registration to localStorage:', err);
-      return false;
-    }
-  };
+function saveRegistration(registration) {
+    const registrations = getStoredRegistrations();
+    registrations.push(registration);
 
-  /**
-   * Builds a registration object from current form values.
-   */
-  const buildRegistration = () => ({
-    fullName: fields.fullName.input.value.trim(),
-    email: fields.email.input.value.trim(),
-    phone: fields.phone.input.value.trim(),
-    college: fields.college.input.value.trim(),
-    event: fields.eventSelect.input.value,
-    registeredAt: new Date().toISOString(),
-  });
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(registrations)
+    );
+}
 
-  /**
-   * Shows the success message area and hides it again after a delay.
-   */
-  const showSuccessMessage = () => {
+function showSuccessMessage() {
 
     successMessage.hidden = false;
 
     successMessage.innerHTML =
-      "✅ Registration Successful!";
+        '✅ Registration Successful! Redirecting to Admin Login...';
 
-    successMessage.style.display = "block";
-    successMessage.style.background = "#d4edda";
-    successMessage.style.color = "#155724";
-    successMessage.style.padding = "15px";
-    successMessage.style.borderRadius = "8px";
-    successMessage.style.marginBottom = "15px";
+    successMessage.style.display = 'block';
 
     successMessage.scrollIntoView({
-        behavior: "smooth"
+        behavior: 'smooth'
     });
-};
+}
 
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
+fields.eventSelect.input.addEventListener('change', () => {
+
+    const selectedEvent = fields.eventSelect.input.value;
+
+    if (eventFees[selectedEvent]) {
+        feeInput.value = '₹' + eventFees[selectedEvent];
+    } else {
+        feeInput.value = '';
+    }
+});
+
+form.addEventListener('submit', (e) => {
+
+    e.preventDefault();
+
     clearAllErrors();
 
     if (!validateForm()) {
         return;
     }
 
-    const registration = buildRegistration();
-    const saved = saveRegistration(registration);
+    const registration = {
+        fullName: fields.fullName.input.value.trim(),
+        email: fields.email.input.value.trim(),
+        phone: fields.phone.input.value.trim(),
+        college: fields.college.input.value.trim(),
+        event: fields.eventSelect.input.value,
+        fee: feeInput.value,
+        paymentStatus: paymentStatus.value,
+        registeredAt: new Date().toISOString()
+    };
 
-    if (!saved) {
-        alert('Something went wrong while saving your registration. Please try again.');
-        return;
-    }
-
-    alert("Registration Successful!");
+    saveRegistration(registration);
 
     showSuccessMessage();
 
+    form.reset();
+    feeInput.value = '';
+
     setTimeout(() => {
-        window.location.href = "admin-login.html";
+        window.location.href = 'admin-login.html';
     }, 2000);
-
-
-showSuccessMessage();
-
-setTimeout(() => {
-    window.location.href = "admin-login.html";
-}, 2000);
 });
-  // Clear individual field errors as the user corrects them.
-  Object.keys(fields).forEach((key) => {
-    fields[key].input.addEventListener('input', () => clearError(key));
-  });
+
+Object.keys(fields).forEach((key) => {
+    fields[key].input.addEventListener('input', () => {
+        clearError(key);
+    });
+});
+
 
 });
+
