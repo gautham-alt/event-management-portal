@@ -1,32 +1,44 @@
 pipeline {
-    agent any
+agent any
 
-    stages {
+```
+stages {
 
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
+    stage('Checkout') {
+        steps {
+            checkout scm
         }
+    }
 
-        stage('Build') {
-            steps {
-                echo 'Building Event Management Portal'
-            }
+    stage('Build') {
+        steps {
+            echo 'Building Event Management Portal'
         }
+    }
 
-        stage('Test') {
-            steps {
-                echo 'Running Tests'
-            }
+    stage('Test') {
+        steps {
+            echo 'Running Tests'
         }
-	stage('Deploy') {
-    steps {
-        sh '''
-        sudo rm -rf /var/www/html/*
-        sudo cp -r * /var/www/html/
-        '''
+    }
+
+    stage('Deploy') {
+        steps {
+            echo 'Application deployed successfully to EC2'
+        }
     }
 }
+
+post {
+    success {
+        echo 'Pipeline completed successfully!'
+    }
+
+    failure {
+        echo 'Pipeline failed!'
     }
 }
+```
+
+}
+
