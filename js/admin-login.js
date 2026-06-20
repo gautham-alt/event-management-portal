@@ -1,104 +1,56 @@
-'use strict';
+document.addEventListener("DOMContentLoaded", () => {
 
-/* ===================================================================
-   Admin Login — admin-login.js
-   NOTE: Credentials are hardcoded for demo purposes only.
-   This is NOT secure for production use — real authentication
-   must be handled by a server, never in client-side JavaScript.
-=================================================================== */
+    const USERNAME = "admin";
+    const PASSWORD = "admin123";
 
-document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById("adminLoginForm");
+    const username = document.getElementById("username");
+    const password = document.getElementById("password");
 
-  const ADMIN_USERNAME = 'admin';
-  const ADMIN_PASSWORD = 'admin123';
-  const REDIRECT_URL = 'admin-dashboard.html';
+    const loginError = document.getElementById("loginError");
+    const usernameError = document.getElementById("usernameError");
+    const passwordError = document.getElementById("passwordError");
 
-  const form = document.getElementById('adminLoginForm');
-  const usernameInput = document.getElementById('username');
-  const passwordInput = document.getElementById('password');
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-  const loginError = document.getElementById('loginError');
-  const usernameError = document.getElementById('usernameError');
-  const passwordError = document.getElementById('passwordError');
+        loginError.hidden = true;
+        usernameError.textContent = "";
+        passwordError.textContent = "";
 
-  /**
-   * Displays the top-level login error banner.
-   */
-  const showLoginError = (message) => {
-    loginError.textContent = message;
-    loginError.hidden = false;
-  };
+        let valid = true;
 
-  /**
-   * Hides the top-level login error banner.
-   */
-  const hideLoginError = () => {
-    loginError.textContent = '';
-    loginError.hidden = true;
-  };
+        if (username.value.trim() === "") {
+            usernameError.textContent = "Username is required";
+            valid = false;
+        }
 
-  /**
-   * Clears a single field's inline error message.
-   */
-  const clearFieldError = (errorEl) => {
-    errorEl.textContent = '';
-  };
+        if (password.value.trim() === "") {
+            passwordError.textContent = "Password is required";
+            valid = false;
+        }
 
-  /**
-   * Validates that both fields are filled in.
-   * Returns true if valid, false otherwise.
-   */
-  const validateFields = (username, password) => {
-    let isValid = true;
+        if (!valid) return;
 
-    clearFieldError(usernameError);
-    clearFieldError(passwordError);
+        if (
+            username.value.trim() === USERNAME &&
+            password.value.trim() === PASSWORD
+        ) {
+            window.location.href = "admin-dashboard.html";
+        } else {
+            loginError.textContent = "Invalid username or password";
+            loginError.hidden = false;
+        }
+    });
 
-    if (!username) {
-      usernameError.textContent = 'Username is required.';
-      isValid = false;
-    }
+    username.addEventListener("input", () => {
+        usernameError.textContent = "";
+        loginError.hidden = true;
+    });
 
-    if (!password) {
-      passwordError.textContent = 'Password is required.';
-      isValid = false;
-    }
-
-    return isValid;
-  };
-
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    hideLoginError();
-
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
-
-    if (!validateFields(username, password)) {
-      return;
-    }
-
-    const credentialsMatch =
-      username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
-
-    if (credentialsMatch) {
-      window.location.href = REDIRECT_URL;
-    } else {
-      showLoginError('Invalid username or password. Please try again.');
-      passwordInput.value = '';
-      passwordInput.focus();
-    }
-  });
-
-  // Hide error feedback as soon as the user starts correcting input.
-  usernameInput.addEventListener('input', () => {
-    clearFieldError(usernameError);
-    hideLoginError();
-  });
-
-  passwordInput.addEventListener('input', () => {
-    clearFieldError(passwordError);
-    hideLoginError();
-  });
+    password.addEventListener("input", () => {
+        passwordError.textContent = "";
+        loginError.hidden = true;
+    });
 
 });

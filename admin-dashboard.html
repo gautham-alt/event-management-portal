@@ -3,88 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Event Management Portal</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <div class="admin-dashboard">
+<div class="admin-dashboard">
 
-        <aside class="admin-sidebar">
-    		<div class="logo">🎉 Event Portal</div>
+    <aside class="admin-sidebar">
+        <div class="logo">🎉 Event Portal</div>
 
-    		<nav aria-label="Admin navigation">
-       			<a href="admin-dashboard.html" class="active">📊 Dashboard</a>
-        		<a href="index.html#events">📅 Events</a>
-        		<a href="register.html">📝 Registrations</a>
-        		<a href="index.html">🌐 Public Site</a>
-    		</nav>
-	</aside>
+        <nav>
+            <a href="admin-dashboard.html" class="active">📊 Dashboard</a>
+            <a href="index.html#events">📅 Events</a>
+            <a href="register.html">📝 Registrations</a>
+            <a href="index.html">🌐 Public Site</a>
+        </nav>
+    </aside>
 
-        <main class="admin-main">
+    <main class="admin-main">
 
-            <header class="admin-header">
-                <h1>Dashboard</h1>
-                <button type="button" class="btn btn-outline" id="logoutBtn">Logout</button>
-            </header>
+        <header class="admin-header">
+            <h1>Dashboard</h1>
+            <button class="btn btn-outline" id="logoutBtn">Logout</button>
+        </header>
 
-            <section class="stats-grid" aria-label="Dashboard statistics">
-                <article class="stat-card">
-                    <p class="stat-value" id="totalRegistrations">0</p>
-                    <p class="stat-label">Total Registrations</p>
-                </article>
+        <section class="stats-grid">
+            <div class="stat-card">
+                <p class="stat-value" id="totalRegistrations">0</p>
+                <p>Total Registrations</p>
+            </div>
 
-                <article class="stat-card">
-                    <p class="stat-value" id="totalEvents">0</p>
-                    <p class="stat-label">Total Events</p>
-                </article>
+            <div class="stat-card">
+                <p class="stat-value" id="totalEvents">0</p>
+                <p>Total Events</p>
+            </div>
 
-                <article class="stat-card">
-                    <p class="stat-value" id="todayRegistrations">0</p>
-                    <p class="stat-label">Today's Registrations</p>
-                </article>
-            </section>
+            <div class="stat-card">
+                <p class="stat-value" id="todayRegistrations">0</p>
+                <p>Today's Registrations</p>
+            </div>
+        </section>
 
-            <section class="admin-controls" aria-label="Registration filters">
-                <div class="form-group">
-                    <label for="searchInput">Search</label>
-                    <input type="search" id="searchInput" placeholder="Search by name, email, or college">
-                </div>
+        <section class="admin-controls">
+            <div class="form-group">
+                <label>Search</label>
+                <input type="search" id="searchInput" placeholder="Search by name, email, or college">
+            </div>
 
-                <div class="form-group">
-                    <label for="eventFilter">Filter by Event</label>
-                    <select id="eventFilter">
-                        <option value="all">All Events</option>
-                        <option value="hackathon-2026">Hackathon 2026</option>
-                        <option value="tech-talk">Tech Talk</option>
-                        <option value="coding-challenge">Coding Challenge</option>
-                    </select>
-                </div>
-            </section>
+            <div class="form-group">
+                <label>Filter by Event</label>
+                <select id="eventFilter">
+                    <option value="all">All Events</option>
+                    <option value="hackathon-2026">Hackathon 2026</option>
+                    <option value="tech-talk">Tech Talk</option>
+                    <option value="coding-challenge">Coding Challenge</option>
+                </select>
+            </div>
+        </section>
 
-            <section class="admin-table-wrapper" aria-label="Registrations table">
-                <table id="registrationsTable">
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">College</th>
-                            <th scope="col">Event</th>
-                            <th scope="col">Registration Date</th>
-                        </tr>
-                    </thead>
-                    <tbody id="registrationsTableBody">
-                        <tr>
-                            <td colspan="6">No registrations found.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
+        <section class="admin-table-wrapper">
+            <table id="registrationsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>College</th>
+                        <th>Event</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="registrationsTableBody">
+                    <tr>
+                        <td colspan="6">No registrations found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
-        </main>
-    </div>
+    </main>
 
-    <script src="js/dashboard.js"></script>
+</div>
+
+<script src="js/dashboard.js"></script>
 </body>
 </html>

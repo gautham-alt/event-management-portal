@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | Event Management Portal</title>
+    <title>Register</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,145 +12,86 @@
     <nav>
         <div class="logo">Event Management Portal</div>
 
-```
-    <ul class="nav-links">
-        <li><a href="index.html#home">Home</a></li>
-        <li><a href="index.html#events">Events</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="admin-login.html">Admin Login</a></li>
-    </ul>
-</nav>
-```
-
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#events">Events</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="admin-login.html">Admin Login</a></li>
+        </ul>
+    </nav>
 </header>
 
 <main>
     <section class="registration-section">
 
-```
-    <form class="register-form" id="registerForm" novalidate>
+        <form class="register-form" id="registerForm">
 
-        <h2>Event Registration</h2>
+            <h2>Event Registration</h2>
 
-        <p class="form-note">
-            Fill in your details below to register for an event.
-        </p>
+            <div id="successMessage" class="success-message" hidden></div>
 
-        <div id="successMessage"
-             class="success-message"
-             hidden>
-        </div>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="fullName" placeholder="Enter your full name">
+                <span id="fullNameError" class="error-message"></span>
+            </div>
 
-        <div class="form-group">
-            <label for="fullName">Full Name</label>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="Enter your email">
+                <span id="emailError" class="error-message"></span>
+            </div>
 
-            <input
-                type="text"
-                id="fullName"
-                placeholder="Enter your full name">
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="phone" placeholder="Enter your phone number">
+                <span id="phoneError" class="error-message"></span>
+            </div>
 
-            <span id="fullNameError"
-                  class="error-message"></span>
-        </div>
+            <div class="form-group">
+                <label>College Name</label>
+                <input type="text" id="college" placeholder="Enter your college">
+                <span id="collegeError" class="error-message"></span>
+            </div>
 
-        <div class="form-group">
-            <label for="email">Email Address</label>
+            <div class="form-group">
+                <label>Select Event</label>
+                <select id="eventSelect">
+                    <option value="">Choose Event</option>
+                    <option value="hackathon-2026">Hackathon 2026</option>
+                    <option value="tech-talk">Tech Talk</option>
+                    <option value="coding-challenge">Coding Challenge</option>
+                </select>
+                <span id="eventSelectError" class="error-message"></span>
+            </div>
 
-            <input
-                type="email"
-                id="email"
-                placeholder="Enter your email">
+            <div class="form-group">
+                <label>Event Fee</label>
+                <input type="text" id="eventFee" readonly>
+            </div>
 
-            <span id="emailError"
-                  class="error-message"></span>
-        </div>
+            <div class="form-group">
+                <label>Payment Status</label>
+                <select id="paymentStatus">
+                    <option value="Paid">Paid</option>
+                    <option value="Pending">Pending</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="phone">Phone Number</label>
+            <button type="submit" class="btn btn-block">
+                Submit Registration
+            </button>
 
-            <input
-                type="tel"
-                id="phone"
-                placeholder="Enter your phone number">
+        </form>
 
-            <span id="phoneError"
-                  class="error-message"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="college">College Name</label>
-
-            <input
-                type="text"
-                id="college"
-                placeholder="Enter your college">
-
-            <span id="collegeError"
-                  class="error-message"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="eventSelect">Select Event</label>
-
-            <select id="eventSelect">
-                <option value="">Choose an Event</option>
-                <option value="hackathon-2026">
-                    Hackathon 2026
-                </option>
-                <option value="tech-talk">
-                    Tech Talk
-                </option>
-                <option value="coding-challenge">
-                    Coding Challenge
-                </option>
-            </select>
-
-            <span id="eventSelectError"
-                  class="error-message"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="eventFee">Event Fee</label>
-
-            <input
-                type="text"
-                id="eventFee"
-                readonly
-                placeholder="Fee will appear here">
-        </div>
-
-        <div class="form-group">
-            <label for="paymentStatus">
-                Payment Status
-            </label>
-
-            <select id="paymentStatus">
-                <option value="Paid">Paid</option>
-                <option value="Pending">Pending</option>
-            </select>
-        </div>
-
-        <button type="submit"
-                class="btn btn-block">
-            Submit Registration
-        </button>
-
-    </form>
-
-</section>
-```
-
+    </section>
 </main>
 
 <footer>
-    <p>
-        &copy; 2026 Event Management Portal.
-        All Rights Reserved.
-    </p>
+    <p>&copy; 2026 Event Management Portal</p>
 </footer>
 
 <script src="js/register.js"></script>
 
 </body>
 </html>
-
