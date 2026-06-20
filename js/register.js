@@ -1,181 +1,75 @@
-'use strict';
+document.addEventListener("DOMContentLoaded", () => {
 
-document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById("registerForm");
+    const successMessage = document.getElementById("successMessage");
 
+    const fullName = document.getElementById("fullName");
+    const email = document.getElementById("email");
+    const phone = document.getElementById("phone");
+    const college = document.getElementById("college");
+    const eventSelect = document.getElementById("eventSelect");
 
-const form = document.getElementById('registerForm');
-const successMessage = document.getElementById('successMessage');
+    const feeInput = document.getElementById("eventFee");
+    const paymentStatus = document.getElementById("paymentStatus");
 
-const fields = {
-    fullName: {
-        input: document.getElementById('fullName'),
-        error: document.getElementById('fullNameError')
-    },
-    email: {
-        input: document.getElementById('email'),
-        error: document.getElementById('emailError')
-    },
-    phone: {
-        input: document.getElementById('phone'),
-        error: document.getElementById('phoneError')
-    },
-    college: {
-        input: document.getElementById('college'),
-        error: document.getElementById('collegeError')
-    },
-    eventSelect: {
-        input: document.getElementById('eventSelect'),
-        error: document.getElementById('eventSelectError')
-    }
-};
-
-const feeInput = document.getElementById('eventFee');
-const paymentStatus = document.getElementById('paymentStatus');
-
-const eventFees = {
-    'hackathon-2026': 200,
-    'tech-talk': 100,
-    'coding-challenge': 150
-};
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_REGEX = /^[0-9+\-\s]{7,15}$/;
-const STORAGE_KEY = 'eventRegistrations';
-
-function setError(fieldKey, message) {
-    const { input, error } = fields[fieldKey];
-    error.textContent = message;
-    input.classList.add('input-invalid');
-}
-
-function clearError(fieldKey) {
-    const { input, error } = fields[fieldKey];
-    error.textContent = '';
-    input.classList.remove('input-invalid');
-}
-
-function clearAllErrors() {
-    Object.keys(fields).forEach(clearError);
-}
-
-function validateForm() {
-
-    let isValid = true;
-
-    const fullName = fields.fullName.input.value.trim();
-    const email = fields.email.input.value.trim();
-    const phone = fields.phone.input.value.trim();
-    const college = fields.college.input.value.trim();
-    const eventValue = fields.eventSelect.input.value;
-
-    if (!fullName || fullName.length < 3) {
-        setError('fullName', 'Enter a valid full name.');
-        isValid = false;
-    }
-
-    if (!EMAIL_REGEX.test(email)) {
-        setError('email', 'Enter a valid email address.');
-        isValid = false;
-    }
-
-    if (!PHONE_REGEX.test(phone)) {
-        setError('phone', 'Enter a valid phone number.');
-        isValid = false;
-    }
-
-    if (!college) {
-        setError('college', 'College name is required.');
-        isValid = false;
-    }
-
-    if (!eventValue) {
-        setError('eventSelect', 'Please select an event.');
-        isValid = false;
-    }
-
-    return isValid;
-}
-
-function getStoredRegistrations() {
-    return JSON.parse(
-        localStorage.getItem(STORAGE_KEY) || '[]'
-    );
-}
-
-function saveRegistration(registration) {
-    const registrations = getStoredRegistrations();
-    registrations.push(registration);
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(registrations)
-    );
-}
-
-function showSuccessMessage() {
-
-    successMessage.hidden = false;
-
-    successMessage.innerHTML =
-        '✅ Registration Successful! Redirecting to Admin Login...';
-
-    successMessage.style.display = 'block';
-
-    successMessage.scrollIntoView({
-        behavior: 'smooth'
-    });
-}
-
-fields.eventSelect.input.addEventListener('change', () => {
-
-    const selectedEvent = fields.eventSelect.input.value;
-
-    if (eventFees[selectedEvent]) {
-        feeInput.value = '₹' + eventFees[selectedEvent];
-    } else {
-        feeInput.value = '';
-    }
-});
-
-form.addEventListener('submit', (e) => {
-
-    e.preventDefault();
-
-    clearAllErrors();
-
-    if (!validateForm()) {
-        return;
-    }
-
-    const registration = {
-        fullName: fields.fullName.input.value.trim(),
-        email: fields.email.input.value.trim(),
-        phone: fields.phone.input.value.trim(),
-        college: fields.college.input.value.trim(),
-        event: fields.eventSelect.input.value,
-        fee: feeInput.value,
-        paymentStatus: paymentStatus.value,
-        registeredAt: new Date().toISOString()
+    const eventFees = {
+        "hackathon-2026": 200,
+        "tech-talk": 100,
+        "coding-challenge": 150
     };
 
-    saveRegistration(registration);
-
-    showSuccessMessage();
-
-    form.reset();
-    feeInput.value = '';
-
-    setTimeout(() => {
-        window.location.href = 'admin-login.html';
-    }, 2000);
-});
-
-Object.keys(fields).forEach((key) => {
-    fields[key].input.addEventListener('input', () => {
-        clearError(key);
+    eventSelect.addEventListener("change", () => {
+        feeInput.value = eventFees[eventSelect.value]
+            ? "₹" + eventFees[eventSelect.value]
+            : "";
     });
+
+    form.addEventListener("submit", (e) => {
+
+        e.preventDefault();
+
+        if (
+            fullName.value.trim() === "" ||
+            email.value.trim() === "" ||
+            phone.value.trim() === "" ||
+            college.value.trim() === "" ||
+            eventSelect.value === ""
+        ) {
+            alert("Please fill all fields");
+            return;
+        }
+
+        const registration = {
+            fullName: fullName.value,
+            email: email.value,
+            phone: phone.value,
+            college: college.value,
+            event: eventSelect.value,
+            fee: feeInput.value,
+            paymentStatus: paymentStatus.value,
+            registeredAt: new Date().toISOString()
+        };
+
+        const registrations =
+            JSON.parse(localStorage.getItem("eventRegistrations")) || [];
+
+        registrations.push(registration);
+
+        localStorage.setItem(
+            "eventRegistrations",
+            JSON.stringify(registrations)
+        );
+
+        successMessage.hidden = false;
+        successMessage.textContent =
+            "Registration Successful! Redirecting...";
+
+        form.reset();
+        feeInput.value = "";
+
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 2000);
+    });
+
 });
-
-
-});
-
