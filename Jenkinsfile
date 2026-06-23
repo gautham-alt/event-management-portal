@@ -26,9 +26,7 @@ pipeline {
                 sh '''
                 echo "Deploying to Nginx"
 
-                rm -rf /var/www/html/*
-
-                cp -r * /var/www/html/
+                cp -r ./* /var/www/html/
 
                 echo "Deployment Complete"
                 '''
