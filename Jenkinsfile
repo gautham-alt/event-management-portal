@@ -23,7 +23,15 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Application deployed successfully to EC2'
+                sh '''
+                echo "Deploying to Nginx"
+
+                rm -rf /var/www/html/*
+
+                cp -r * /var/www/html/
+
+                echo "Deployment Complete"
+                '''
             }
         }
     }
