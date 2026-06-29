@@ -17,7 +17,16 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo 'Running Tests'
+                sh '''
+                test -f index.html
+                test -f register.html
+                test -f admin-login.html
+                test -f admin-dashboard.html
+                test -f css/style.css
+                test -f js/register.js
+                test -f js/admin-login.js
+                test -f js/dashboard.js
+                '''
             }
         }
 
